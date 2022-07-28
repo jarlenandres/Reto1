@@ -6,11 +6,14 @@ package Views;
 
 import Model.Conexion;
 import Controller.*;
+import Model.Sucursal;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
@@ -21,11 +24,12 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class AddUserForm extends javax.swing.JDialog {
     ComboBoxModel enumDocumentType;
-    ComboBoxModel enumDepartament;
     Conexion conexion = new Conexion();
     Connection connection;
     Statement st;
     ResultSet rs;
+    CbSucursal cbSucursales;
+    ArrayList mListaSucursales;
 
     /**
      * Creates new form AddUserForm
@@ -33,9 +37,22 @@ public class AddUserForm extends javax.swing.JDialog {
     public AddUserForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         enumDocumentType = new DefaultComboBoxModel(EnumDocumentType.values());
-        enumDepartament = new DefaultComboBoxModel(EnumDepartament.values());
         initComponents();
         this.setLocationRelativeTo(parent);
+        cbSucursales = new CbSucursal();
+        mListaSucursales = new ArrayList();
+        llenarComboboxSucursal();
+        
+    }
+    
+    public void llenarComboboxSucursal(){
+        mListaSucursales = cbSucursales.getListSucursales();
+        Iterator iterator = mListaSucursales.iterator();
+        while(iterator.hasNext()){
+            //Verificar si el contenido del array es un objeto y si el objeto es de tipo sucursal
+            Sucursal sucursal = (Sucursal)iterator.next();
+            cbBranch.addItem(sucursal);
+        }
     }
 
     /**
@@ -246,14 +263,12 @@ public class AddUserForm extends javax.swing.JDialog {
         int posicionLista = cbTipoDocumento.getSelectedIndex();
         String document = txtDocument.getText();
         String email = txtEmail.getText();
-        String branch = cbBranch.getSelectedItem().toString();
-        int posicionBranch = cbBranch.getSelectedIndex();
 
-        if (name.isEmpty() || surname.isEmpty() || document.isEmpty() || email.isEmpty() || branch.isEmpty()) {
+        if (name.isEmpty() || surname.isEmpty() || document.isEmpty() || email.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Faltan campos por diligenciar", "Registo de usuario", JOptionPane.WARNING_MESSAGE);
         } else {
             String query = "INSERT INTO `empleado`(`nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`, `FK_idSucursal`) VALUES ('"
-                    +name+"','"+surname+"','"+tipoDoc+"','"+document+"','"+email+"','"+branch+"')";
+                    +name+"','"+surname+"','"+tipoDoc+"','"+document+"','"+email+"')";
             
             System.out.println("nombre: " + name + " " + surname + 
                 ", tipo documento " + tipoDoc + " " + document + 
@@ -327,7 +342,7 @@ public class AddUserForm extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSave;
-    private javax.swing.JComboBox<String> cbBranch;
+    private javax.swing.JComboBox<Sucursal> cbBranch;
     private javax.swing.JComboBox<String> cbTipoDocumento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
