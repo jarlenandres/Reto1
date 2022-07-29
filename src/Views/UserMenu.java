@@ -49,7 +49,7 @@ public class UserMenu extends javax.swing.JFrame {
     private void listarEmpleados() {
         String searchUser = txtSearchUser.getText();
         if (searchUser.isEmpty()) {
-            String query = "SELECT * FROM empleado";
+            String query = "SELECT `nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`,  `nombreSucursal` FROM `empleado` INNER JOIN sucursal ON idSucursal = FK_idSucursal;";
             try {
                 connection = conexion.getConnection();
                 //Crear la consula query para la BD
@@ -60,27 +60,22 @@ public class UserMenu extends javax.swing.JFrame {
                 contenidoTablaEmpleados = (DefaultTableModel) tblEmployee.getModel();
 
                 while (rs.next()) {
-                    employee[0] = rs.getInt("idEmp");
-                    employee[1] = rs.getString("nombreEmp");
-                    employee[2] = rs.getString("apellidos");
-                    employee[3] = rs.getString("tipoDocumento");
-                    employee[4] = rs.getString("documento");
-                    employee[5] = rs.getString("correo");
-
+                    employee[0] = rs.getString("nombreEmp");
+                    employee[1] = rs.getString("apellidos");
+                    employee[2] = rs.getString("tipoDocumento");
+                    employee[3] = rs.getString("documento");
+                    employee[4] = rs.getString("correo");
+                    employee[5] = rs.getString("nombreSucursal");
                     //en la tabla creamos una nueva fila con los 6 atributos del empleado
                     contenidoTablaEmpleados.addRow(employee);
                     tblEmployee.setModel(contenidoTablaEmpleados);
-
-                    System.out.println("idEmp: " + employee[0] + ", nombre: "
-                            + employee[1] + ", documento: " + employee[2] + ", tipoDocumento: " + employee[3]
-                            + ", correo" + employee[4]);
                 }
 
             } catch (SQLException e) {
                 System.out.println("Nooo se pudo cargar información de los empleados");
             }
         } else {
-            String query = "SELECT * FROM `empleado` WHERE nombreEmp like '%" + searchUser + "%' OR apellidos like '%" + searchUser + "%' OR documento like '%" + searchUser + "%';";
+            String query = "SELECT `nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`,  `nombreSucursal` FROM `empleado` INNER JOIN sucursal WHERE idSucursal = FK_idSucursal AND nombreEmp like '%" + searchUser + "%' OR apellidos like '%" + searchUser + "%' OR documento like '%" + searchUser + "%';";
             try {
                 connection = conexion.getConnection();
                 //Crear la consula query para la BD
@@ -91,13 +86,12 @@ public class UserMenu extends javax.swing.JFrame {
                 contenidoTablaEmpleados = (DefaultTableModel) tblEmployee.getModel();
 
                 while (rs.next()) {
-                    employee[0] = rs.getInt("idEmp");
-                    employee[1] = rs.getString("nombreEmp");
-                    employee[2] = rs.getString("apellidos");
-                    employee[3] = rs.getString("tipoDocumento");
-                    employee[4] = rs.getString("documento");
-                    employee[5] = rs.getString("correo");
-                    employee[6] = rs.getString("FK_idSucursal");
+                    employee[0] = rs.getString("nombreEmp");
+                    employee[1] = rs.getString("apellidos");
+                    employee[2] = rs.getString("tipoDocumento");
+                    employee[3] = rs.getString("documento");
+                    employee[4] = rs.getString("correo");
+                    employee[5] = rs.getString("nombreSucursal");
                     //en la tabla creamos una nueva fila con los 6 atributos del empleado
                     contenidoTablaEmpleados.addRow(employee);
                     tblEmployee.setModel(contenidoTablaEmpleados);
@@ -440,11 +434,11 @@ public class UserMenu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "IdEmp", "Nombre", "Apellidos", "Tipo documento", "Documento", "Correo", "IdDependencia"
+                "Nombre", "Apellidos", "Tipo documento", "Documento", "Correo", "Sucursal"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -598,20 +592,16 @@ public class UserMenu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Seleccione un empleado.", "", JOptionPane.WARNING_MESSAGE);
         } else {
             //Indicamos los datos de la fila seleccionada
-            int id = Integer.parseInt(tblEmployee.getValueAt(filaSeleccionada, 0).toString());
             String name = (String) tblEmployee.getValueAt(filaSeleccionada, 1).toString();
             String surname = (String) tblEmployee.getValueAt(filaSeleccionada, 2).toString();
             String tipoDoc = (String) tblEmployee.getValueAt(filaSeleccionada, 3).toString();
             String document = (String) tblEmployee.getValueAt(filaSeleccionada, 4).toString();
             String email = (String) tblEmployee.getValueAt(filaSeleccionada, 5).toString();
-            int idSucursal = Integer.parseInt(tblEmployee.getValueAt(filaSeleccionada, 6).toString());
+            String sucursal = (String)(tblEmployee.getValueAt(filaSeleccionada, 6).toString());
 
-            //Prueba mostrar datos en pantalla
-            System.out.println("Id: " + id + ", Nombre: " + name + ", Apellido: " + surname
-                    + ", TipoDocumento: " + tipoDoc + ", numero: " + document + ", Correo: " + email);
             //Instanciar el JDialg para mostar la info del empleado seleccionado
             ShowUserForm showUserForm = new ShowUserForm(this, true);
-            showUserForm.recibeDatos(id, name, surname, tipoDoc, document, email);
+            showUserForm.recibeDatos(name, surname, tipoDoc, document, email, sucursal);
             showUserForm.setVisible(true);
             //Actualizamos la info de la tabla en caso que se hubiese editado
             borrarRegistroTabla();

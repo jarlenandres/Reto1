@@ -30,10 +30,8 @@ public class ShowUserForm extends javax.swing.JDialog {
     }
 
     //Crear el método recibeDatos que recibe los datos de UserMenu
-    public void recibeDatos(int id, String name, String surname, String tipoDoc, String document, String email) {
-        //Prueba mostrar datos en pantalla
-        System.out.println(id + " " + name + " " + surname + " " + tipoDoc + " " + document + " " + email);
-        txtId.setText(""+id);
+    public void recibeDatos(String name, String surname, String tipoDoc, String document, String email, String sucursal) {
+        
         txtName.setText(name);
         txtSurname.setText(surname);
         txtTipoDoc.setText(tipoDoc);

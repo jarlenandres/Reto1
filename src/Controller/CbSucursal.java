@@ -5,8 +5,7 @@
 package Controller;
 
 import java.sql.Connection;
-import Model.Conexion;
-import Model.Sucursal;
+import Model.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,6 +26,7 @@ public class CbSucursal {
     }
 
     public ArrayList getListSucursales() {
+        System.out.println("Funcion getListSucursales");
         ArrayList mListaSucursales = new ArrayList();
         Sucursal sucursal = null;
         String querySucursales = "SELECT idSucursal, nombreSucursal FROM sucursal;";
@@ -38,10 +38,11 @@ public class CbSucursal {
                 sucursal = new Sucursal();
                 //Cunsulta que nos devuelve la BD
                 int idSucursal = rs.getInt("idSucursal");
-                String nombreSucursal = rs.getString("nombreSucuesal");
+                String nombreSucursal = rs.getString("nombreSucursal");
                 //Asignar los valores que nos da la BD a los atributos de la clase sucursal
                 sucursal.setIdSucursal(idSucursal);
                 sucursal.setNameSucursal(nombreSucursal);
+                mListaSucursales.add(sucursal);
             }
         } catch (SQLException e) {
             System.out.println(e);

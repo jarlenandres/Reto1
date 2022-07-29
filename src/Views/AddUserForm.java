@@ -17,12 +17,12 @@ import java.util.Iterator;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
-
 /**
  *
  * @author harle
  */
 public class AddUserForm extends javax.swing.JDialog {
+
     ComboBoxModel enumDocumentType;
     Conexion conexion = new Conexion();
     Connection connection;
@@ -42,17 +42,19 @@ public class AddUserForm extends javax.swing.JDialog {
         cbSucursales = new CbSucursal();
         mListaSucursales = new ArrayList();
         llenarComboboxSucursal();
-        
+
     }
-    
-    public void llenarComboboxSucursal(){
+
+    public void llenarComboboxSucursal() {
         mListaSucursales = cbSucursales.getListSucursales();
         Iterator iterator = mListaSucursales.iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             //Verificar si el contenido del array es un objeto y si el objeto es de tipo sucursal
-            Sucursal sucursal = (Sucursal)iterator.next();
+            Sucursal sucursal = (Sucursal) iterator.next();
             cbBranch.addItem(sucursal);
         }
+        String nombreSucursal = cbBranch.getSelectedItem().toString();
+        String query = "SELECT idSucursal FROM `sucursal` WHERE nombreSucursal = '" + nombreSucursal + "';";
     }
 
     /**
@@ -256,36 +258,38 @@ public class AddUserForm extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDocumentActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        String filtroBranch = "SELECT `nombreSucursal`, `nombreDepartamento` FROM `sucursal` INNER JOIN `direccion` ON idDireccion = FK_idDireccion;";
+        //String filtroBranch = "SELECT `nombreSucursal`, `nombreDepartamento` FROM `sucursal` INNER JOIN `direccion` ON idDireccion = FK_idDireccion;";
         String name = txtName.getText();
         String surname = txtSurname.getText();
         String tipoDoc = cbTipoDocumento.getSelectedItem().toString();
         int posicionLista = cbTipoDocumento.getSelectedIndex();
         String document = txtDocument.getText();
         String email = txtEmail.getText();
+        String nombreSucursal = cbBranch.getSelectedItem().toString();
+        String queryIdSucursal = "SELECT idSucursal FROM `sucursal` WHERE nombreSucursal = '" + nombreSucursal + "';";
 
         if (name.isEmpty() || surname.isEmpty() || document.isEmpty() || email.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Faltan campos por diligenciar", "Registo de usuario", JOptionPane.WARNING_MESSAGE);
         } else {
-            String query = "INSERT INTO `empleado`(`nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`, `FK_idSucursal`) VALUES ('"
-                    +name+"','"+surname+"','"+tipoDoc+"','"+document+"','"+email+"')";
-            
-            System.out.println("nombre: " + name + " " + surname + 
-                ", tipo documento " + tipoDoc + " " + document + 
-                ", correo: " + email);
-            try{
+            try {
                 connection = conexion.getConnection();
                 st = connection.createStatement();
-                //El executeUpdate se utiliza para las funciones
-                //Crear, eliminar y actualizar la informacion de los empleados
-                st.executeUpdate(query);
-                JOptionPane.showMessageDialog(this, "Registro exitoso", "Empleados", JOptionPane.INFORMATION_MESSAGE);
-                
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(this, "No se pudo registrar el usuario", "Empleados", JOptionPane.ERROR_MESSAGE);
+                rs = st.executeQuery(queryIdSucursal);
+                while (rs.next()) {
+                    int idSucursal = rs.getInt("idSucursal");
+                    String query = "INSERT INTO `empleado`(`nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`, `FK_idSucursal`) VALUES ('"
+                            + name + "','" + surname + "','" + tipoDoc + "','" + document + "','" + email + "'," + idSucursal + ")";
+                    try {
+                        st.executeUpdate(query);
+                        JOptionPane.showMessageDialog(this, "Registro exitoso", "Empleados", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (SQLException e) {
+                        System.out.println(e);
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
             }
             this.dispose();
-            
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
