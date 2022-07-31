@@ -586,18 +586,17 @@ public class UserMenu extends javax.swing.JFrame {
     private void tblEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmployeeMouseClicked
         // Capturar el número de la fila seleccionada
         int filaSeleccionada = tblEmployee.getSelectedRow();
-        System.out.println("Fila seleccionada" + filaSeleccionada);
         //Validar si el usuario selecciona una fila
-        if (filaSeleccionada == -1) {
+        if (filaSeleccionada <= -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un empleado.", "", JOptionPane.WARNING_MESSAGE);
         } else {
             //Indicamos los datos de la fila seleccionada
-            String name = (String) tblEmployee.getValueAt(filaSeleccionada, 1).toString();
-            String surname = (String) tblEmployee.getValueAt(filaSeleccionada, 2).toString();
-            String tipoDoc = (String) tblEmployee.getValueAt(filaSeleccionada, 3).toString();
-            String document = (String) tblEmployee.getValueAt(filaSeleccionada, 4).toString();
-            String email = (String) tblEmployee.getValueAt(filaSeleccionada, 5).toString();
-            String sucursal = (String)(tblEmployee.getValueAt(filaSeleccionada, 6).toString());
+            String name = (String) tblEmployee.getValueAt(filaSeleccionada, 0).toString();
+            String surname = (String) tblEmployee.getValueAt(filaSeleccionada, 1).toString();
+            String tipoDoc = (String) tblEmployee.getValueAt(filaSeleccionada, 2).toString();
+            String document = (String) tblEmployee.getValueAt(filaSeleccionada, 3).toString();
+            String email = (String) tblEmployee.getValueAt(filaSeleccionada, 4).toString();
+            String sucursal = (String)(tblEmployee.getValueAt(filaSeleccionada, 5).toString());
 
             //Instanciar el JDialg para mostar la info del empleado seleccionado
             ShowUserForm showUserForm = new ShowUserForm(this, true);
