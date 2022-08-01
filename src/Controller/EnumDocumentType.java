@@ -3,7 +3,7 @@ package Controller;
 //Clase de tipo enumerlabel
 public enum EnumDocumentType {
     SeleccioneUnaOpción,
-    CedulaCuidadania,
+    CedulaCiudadania,
     CedulaExtranjera,
     LibretaMilitar,
     Pasaporte,

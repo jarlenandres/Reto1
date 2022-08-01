@@ -619,7 +619,10 @@ public class UserMenu extends javax.swing.JFrame {
         String num1 = txtNum1.getText();
         String num2 = txtNum2.getText();
         String num3 = txtNum3.getText();
-        String queryDireccion = "INSERT INTO `direccion`(`zona`, `tipoCalle`, `numero1`, `numero2`, `numero3`, `nombreDepartamento`) VALUES ('"
+        if (num1.isEmpty() || num2.isEmpty() || num3.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Faltan campos por diligenciar", "", JOptionPane.ERROR_MESSAGE);
+        }else{
+            String queryDireccion = "INSERT INTO `direccion`(`zona`, `tipoCalle`, `numero1`, `numero2`, `numero3`, `nombreDepartamento`) VALUES ('"
                 + zone + "','" + typeStreet + "','" + num1 + "','" + num2 + "','" + num3 + "','" + departament + "');";
         try {
             connection = conexion.getConnection();
@@ -648,6 +651,8 @@ public class UserMenu extends javax.swing.JFrame {
             System.out.println(e);
             JOptionPane.showMessageDialog(this, "No se pudo crear la sucursal", "", JOptionPane.ERROR_MESSAGE);
         }
+        }
+        
     }//GEN-LAST:event_btnSaveBranchActionPerformed
 
     private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed

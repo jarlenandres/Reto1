@@ -42,7 +42,6 @@ public class AddUserForm extends javax.swing.JDialog {
         cbSucursales = new CbSucursal();
         mListaSucursales = new ArrayList();
         llenarComboboxSucursal();
-
     }
 
     public void llenarComboboxSucursal() {
@@ -279,8 +278,10 @@ public class AddUserForm extends javax.swing.JDialog {
                     int idSucursal = rs.getInt("idSucursal");
                     String query = "INSERT INTO `empleado`(`nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`, `FK_idSucursal`) VALUES ('"
                             + name + "','" + surname + "','" + tipoDoc + "','" + document + "','" + email + "'," + idSucursal + ")";
+                    
                     try {
                         st.executeUpdate(query);
+                        System.out.println(query);
                         JOptionPane.showMessageDialog(this, "Registro exitoso", "Empleados", JOptionPane.INFORMATION_MESSAGE);
                     } catch (SQLException e) {
                         System.out.println(e);
