@@ -59,6 +59,7 @@ public class ShowUserForm extends javax.swing.JDialog {
                     st.executeUpdate(query);
                     JOptionPane.showMessageDialog(this, "Se ha actualizado los datos el empleado", "Actualización de empleado", JOptionPane.INFORMATION_MESSAGE);
                 } catch (SQLException e) {
+                    System.out.println(e);
                     JOptionPane.showMessageDialog(this, "No fue posible realizar los datos del empleado", "Actualización de empleado", JOptionPane.ERROR_MESSAGE);
                 }
             }

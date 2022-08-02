@@ -707,11 +707,10 @@ public class UserMenu extends javax.swing.JFrame {
                     ShowBranchForm showBranchForm = new ShowBranchForm(this, true);
                     showBranchForm.recibeDatosSucursal(idDireccion, sucursal, departament, zona, tipoCalle, num1, num2, num3);
                     showBranchForm.setVisible(true);
-
+                    //Actualizar la info de la tabla en caso de ser editado
+                    borrarDatosTablaSucursales();
+                    listarSucursales();
                 }
-                //Actualizar la info de la tabla en caso de ser editado
-                borrarDatosTablaSucursales();
-                listarSucursales();
             } catch (SQLException e) {
                 System.out.println(e);
             }

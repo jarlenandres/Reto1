@@ -40,7 +40,6 @@ public class ShowBranchForm extends javax.swing.JDialog {
     public void actualizarDireccion() {
         String sucursal = txtSucursal.getText();
         String queryIdSucursal = "SELECT `idSucursal`, `idDireccion` FROM sucursal INNER JOIN direccion WHERE idDireccion = FK_idDireccion AND nombreSucursal ='" + sucursal + "';";
-        System.out.println(queryIdSucursal);
         try {
             connection = conexion.getConnection();
             st = connection.createStatement();
@@ -54,25 +53,52 @@ public class ShowBranchForm extends javax.swing.JDialog {
                 String departamento = cbDepartament.getSelectedItem().toString();
                 String tipoCalle = cbStreet.getSelectedItem().toString();
                 String zona = cbZona.getSelectedItem().toString();
-                String queryActualizarDireccion = "UPDATE `direccion` SET `zona`='" + zona + "',`tipoCalle`='" + tipoCalle + "',`numero1`='" + num1 + "',`numero2`='" + num2 + "',`numero3`='" + num3 + "',`nombreDepartamento`='" + departamento + "' WHERE `idDireccion`='" + idDireccion + "';";
-                System.out.println(queryActualizarDireccion);
+                String queryActualizarDireccion = "UPDATE `direccion` SET `zona`='" + zona + "',`tipoCalle`='" + tipoCalle + "',`numero1`='" + num1 + "',`numero2`='" + num2 + "',`numero3`='" + num3 + "',`nombreDepartamento`='" + departamento + "' WHERE `idDireccion`=" + idDireccion + ";";
                 try {
                     st.executeUpdate(queryActualizarDireccion);
+                    String nSucursal = txtNuevaSucursal.getText();
+                    if (!nSucursal.isEmpty()) {
+                        String queryActualizarSucursal = "UPDATE `sucursal` SET `nombreSucursal`='" + nSucursal + "' WHERE `idSucursal`=" + idSucursal + ";";
+                        try {
+                            st.executeUpdate(queryActualizarSucursal);
+                        } catch (SQLException e) {
+                            System.out.println(e);
+                        }
+                    }
                 } catch (SQLException e) {
                     System.out.println(e);
                 }
-                String nSucursal = txtNuevaSucursal.getText();
-                if (nSucursal.isEmpty()) {
-                    String queryActualizarSucursal = "UPDATE `sucursal` SET `nombreSucursal`='" + nSucursal + "' WHERE `idSucursal`='" + idSucursal + "';";
-                    System.out.println(queryActualizarSucursal);
+            }
+        } catch (java.sql.SQLException e) {
+            System.out.println(e);
+        }
+        this.dispose();
+    }
+
+    public void eliminarDireccion() {
+        String sucursal = txtSucursal.getText();
+        String queryIdSucursal = "SELECT `idSucursal`, `idDireccion` FROM sucursal INNER JOIN direccion WHERE idDireccion = FK_idDireccion AND nombreSucursal ='" + sucursal + "';";
+        try {
+            connection = conexion.getConnection();
+            st = connection.createStatement();
+            rs = st.executeQuery(queryIdSucursal);
+            while (rs.next()) {
+                int idSucursal = rs.getInt("idSucursal");
+                int idDireccion = rs.getInt("idDireccion");
+                String queryEliminarSucursal = "DELETE FROM `sucursal` WHERE idSucursal = " + idSucursal + ";";
+                try {
+                    st.executeUpdate(queryEliminarSucursal);
+                    String queryEliminarDireccion = "DELETE FROM `direccion` WHERE idDireccion = " + idDireccion + ";";
                     try {
-                        st.executeUpdate(queryActualizarSucursal);
+                        st.executeUpdate(queryEliminarDireccion);
                     } catch (SQLException e) {
                         System.out.println(e);
                     }
+                } catch (SQLException e) {
+                    System.out.println(e);
                 }
             }
-        } catch (java.sql.SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
         this.dispose();
@@ -145,6 +171,11 @@ public class ShowBranchForm extends javax.swing.JDialog {
         });
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/recycle-bin.png"))); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/cancelIcon.png"))); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -191,7 +222,6 @@ public class ShowBranchForm extends javax.swing.JDialog {
                                     .addContainerGap()
                                     .addComponent(jLabel8)
                                     .addGap(5, 5, 5)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -283,12 +313,18 @@ public class ShowBranchForm extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         actualizarDireccion();
+        JOptionPane.showMessageDialog(this, "Se ha actualizado los datos de la sucursal", "", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        eliminarDireccion();
+        JOptionPane.showMessageDialog(this, "Se ha eliminado la sucursal", "", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
