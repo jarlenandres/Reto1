@@ -531,8 +531,8 @@ public class UserMenu extends javax.swing.JFrame {
                                 .addComponent(btnShow))))
                     .addComponent(jLabel1))
                 .addGap(16, 16, 16)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -544,8 +544,8 @@ public class UserMenu extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tbpEmpresa.addTab("Empleados", jPanel1);
@@ -651,24 +651,8 @@ public class UserMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveBranchActionPerformed
 
     private void btnAddEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddEmployeeActionPerformed
-        int nroFila = tblBranchs.getSelectedRow();
-        String sucursal = tblBranchs.getValueAt(nroFila, 0).toString();
-        String querySucursal = "SELECT idSucursal FROM `sucursal` WHERE nombreSucursal = '" + sucursal + "'";
-        System.out.println(querySucursal);
-        try {
-            connection = conexion.getConnection();
-            st = connection.createStatement();
-            rs = st.executeQuery(querySucursal);
-            while (rs.next()) {
-                int idSucursal = rs.getInt("idSucursal");
-                ListEmployee empLista = new ListEmployee(this, true);
-                empLista.setVisible(true);
-                empLista.recibirIdSucursal(idSucursal);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-
+       Workstation workstation = new Workstation(this, true);
+       workstation.setVisible(true);
     }//GEN-LAST:event_btnAddEmployeeActionPerformed
 
     private void btnListBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListBranchActionPerformed

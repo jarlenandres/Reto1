@@ -9,6 +9,11 @@ public class Sucursal {
         this.nameSucursal = "";
     }
 
+    public Sucursal(int idSucursal, String nameSucursal) {
+        this.idSucursal = idSucursal;
+        this.nameSucursal = nameSucursal;
+    }
+    
     public int getIdSucursal() {
         return idSucursal;
     }
