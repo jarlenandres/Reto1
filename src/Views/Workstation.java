@@ -48,6 +48,19 @@ public class Workstation extends javax.swing.JDialog {
             cbSucursales.addItem(sucursal);
         }
     }
+    
+    public void eliminarPuestoTrabajo(){
+        String sucursal = cbSucursales.getSelectedItem().toString();
+        String query = "DELETE FROM `puestotrabajo` WHERE `nombrePuestoTrabajo` = '"+sucursal+"';";
+        try{
+            connection = conexion.getConnection();
+            st = connection.createStatement();
+            st.executeUpdate(query);
+            System.out.println(query);
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -95,6 +108,11 @@ public class Workstation extends javax.swing.JDialog {
         });
 
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/recycle-bin.png"))); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Puesto de trabajo");
@@ -201,6 +219,11 @@ public class Workstation extends javax.swing.JDialog {
         }
         this.dispose();
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        eliminarPuestoTrabajo();
+        this.dispose();
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments

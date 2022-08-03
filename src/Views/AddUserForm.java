@@ -273,7 +273,8 @@ public class AddUserForm extends javax.swing.JDialog {
         String document = txtDocument.getText();
         String email = txtEmail.getText();
         String nombreSucursal = cbBranch.getSelectedItem().toString();
-        String queryIdSucursal = "SELECT idSucursal FROM `sucursal` WHERE nombreSucursal = '" + nombreSucursal + "';";
+        String puestoTrabajo = cbPuestroTrabajo.getSelectedItem().toString();
+        String queryIdSucursal = "SELECT idSucursal, idPuestoTrabajo FROM `sucursal` INNER JOIN puestotrabajo ON (idSucursal = FK_idSucursal) WHERE nombreSucursal = '"+nombreSucursal+"' AND nombrePuestoTrabajo = '"+puestoTrabajo+"';";
 
         if (name.isEmpty() || surname.isEmpty() || document.isEmpty() || email.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Faltan campos por diligenciar", "Registo de usuario", JOptionPane.WARNING_MESSAGE);
@@ -284,8 +285,9 @@ public class AddUserForm extends javax.swing.JDialog {
                 rs = st.executeQuery(queryIdSucursal);
                 while (rs.next()) {
                     int idSucursal = rs.getInt("idSucursal");
-                    String query = "INSERT INTO `empleado`(`nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`, `FK_idSucursal`) VALUES ('"
-                            + name + "','" + surname + "','" + tipoDoc + "','" + document + "','" + email + "'," + idSucursal + ")";
+                    int idPuestoTrabajo = rs.getInt("idPuestoTrabajo");
+                    String query = "INSERT INTO `empleado`(`nombreEmp`, `apellidos`, `tipoDocumento`, `documento`, `correo`, `FK_idSucursal`, `FK_idPuestoTrabajo`) VALUES ('"
+                            + name + "','" + surname + "','" + tipoDoc + "','" + document + "','" + email + "'," + idSucursal + "," + idPuestoTrabajo + ")";
                     try {
                         st.executeUpdate(query);
                         JOptionPane.showMessageDialog(this, "Registro exitoso", "Empleados", JOptionPane.INFORMATION_MESSAGE);
